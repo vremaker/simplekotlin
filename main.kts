@@ -53,39 +53,47 @@ class Person(val firstName: String, val lastName: String, var age: Int) {
         return (compare.hashCode() == this.hashCode())
     }
 }
+
 // write a class "Money"
-class Money(amount: Int, currency: String) {
-    /*SET STARTING EXCPTIONS  */
-     init {
+class Money(var amount: Int, var currency: String) {
+    init {
         if (currency != "USD" && currency != "EUR" &&
-                currency != "CAN" && currency != "GBP") {
-            throw Exception("Currency not supported!")
-        } else if (amount < 0) {
-            throw Exception("Amount can't be less than zero!")
+                currency != "CAN" && currency != "GBP") 
+            throw Exception("Does Not Exist")
+        else if (amount < 0) {
+            throw Exception("Invalid Number")
         }
     }
+    fun convert(toChange: String): Money {
+        var nextAmount = 0; 
+        when(this.currency) { 
+            "USD" -> nextAmount = checkCurrency(toChange)
+            "EUR" -> nextAmount = checkCurrency(toChange)
+            "GBP" -> nextAmount = checkCurrency(toChange)
+            "CAN" -> nextAmount = checkCurrency(toChange)
+        }
+        return Money(nextAmount, toChange)
+    }
 
-    fun convert (convertMe: String) : Money {
-         when(convertMe) {
-             "tenUSD" -> return Money(5, "GBP")
-             "fiveGBP" -> return Money(10, "USD")
-             "tenUSD" -> return Money(15, "EUR")
-             else -> return Money(0, "GBP")8
+    fun checkCurrency(x: String): Int{
+         if(x == "GBP") 
+            return  5 
+         else if(x == "USD")
+            return  10
+        else if(x == "EUR")
+            return 15
+        else if (x == "CAN")
+            return 15
+    return 0
+    }
 
-         }
-        /* 10 USD converts to 15 EUR; 12 USD converts to 15 CAN*/
-    } 
+    operator fun plus(toAdd: Money): Money {
+        var added = toAdd.convert(this.currency)
+        return(Money(added.amount + this.amount, this.currency))
+    }
 }
-/*
-   "Amount" is a standard Int.
-   Define the properties such that "amount" can never be less than zero, and that "currency"
-    can only be one of those four symbols. Define a public method, convert, that takes a String 
-    argument for the currency type to convert to, and return a new Money instance with the amount 
-    converted. Conversion rates should be as follows: 10 USD converts to 5 GBP; 10 USD converts to 
-    15 EUR; 12 USD converts to 15 CAN. (Make sure you can convert in both directions!) Define the 
-    "+" operator on Money to return a new instance of Money that adds the amount, converting the 
-    currency to the first (left-hand) Money's currency. So adding (10 USD) + (5 GBP) should return a
-     result in USD. Similarly, adding (5 GBP) + (10 USD) should return the result in GBP. */
+
+
 // ============ DO NOT EDIT BELOW THIS LINE =============
 print("When tests: ")
 val when_tests = listOf(
